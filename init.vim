@@ -41,20 +41,6 @@ let mapleader=" "
 
 nnoremap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source C:\Users\jonathan.dewet\AppData\Local\nvim\init.vim<CR>
 
-
-" function! g:ToggleComment()
-"     normal! gv
-	
-"     let selection = [getpos("'<"), getpos("'>")]
-"     let endLine = selection[1][1]
-"     let startLine = selection[0][1]
-"     let getpos("v") = getpos('v')
-"     let getpos(".") = getpos('.')
-	
-"     " call VSCodeNotifyRange("editor.action.commentLine", startLine, endLine, 0)
-"     call VSCodeNotifyRange("actions.find", getpos("v"), getpos("."), 0)
-" endfunction
-
 function! s:showCommands()
     let startPos = getpos("v")
     let endPos = getpos(".")
