@@ -1,4 +1,6 @@
+" https://github.com/asvetliakov/vscode-neovim
 " Use PlugInstall to install in a real terminal to install new plugins
+
 " Plugins will be downloaded under the specified directory.
 call plug#begin('~/.vim/plugged')
 
@@ -37,6 +39,34 @@ endif
 " Space Leader 
 let mapleader=" "
 
+nnoremap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source C:\Users\jonathan.dewet\AppData\Local\nvim\init.vim<CR>
+
+
+" function! g:ToggleComment()
+"     normal! gv
+	
+"     let selection = [getpos("'<"), getpos("'>")]
+"     let endLine = selection[1][1]
+"     let startLine = selection[0][1]
+"     let getpos("v") = getpos('v')
+"     let getpos(".") = getpos('.')
+	
+"     " call VSCodeNotifyRange("editor.action.commentLine", startLine, endLine, 0)
+"     call VSCodeNotifyRange("actions.find", getpos("v"), getpos("."), 0)
+" endfunction
+
+function! s:showCommands()
+    let startPos = getpos("v")
+    let endPos = getpos(".")
+    call VSCodeNotifyRangePos("workbench.action.findInFiles", startPos[1], endPos[1], startPos[2], endPos[2], 1)
+endfunction
+
+xnoremap <Leader><Leader> <Cmd>call <SID>showCommands()<CR>
+" xnoremap <C-c> <Cmd>call <SID>showCommands()<CR>
+
+
+
+
 map s <Plug>(easymotion-f2)
 map S <Plug>(easymotion-F2)
 
@@ -52,25 +82,12 @@ map <Leader>j <Plug>(IndentWisePreviousLesserIndent)
 nnoremap <Leader>a :let @a=@"<CR>
 nnoremap <Leader>b :let @b=@"<CR>
 
-" Create a new line with correct indendint
-nnoremap <Leader>o ddO
-
 " Select a function
 nnoremap <Leader>o va{oV
 
-function! s:openVSCodeCommandsInVisualMode()
-    normal! gv
-    let visualmode = visualmode()
-    if visualmode == "V"
-        let startLine = line("v")
-        let endLine = line(".")
-        call VSCodeNotifyRange("workbench.action.showCommands", startLine, endLine, 1)
-    else
-        let startPos = getpos("v")
-        let endPos = getpos(".")
-        call VSCodeNotifyRangePos("workbench.action.showCommands", startPos[1], endPos[1], startPos[2], endPos[2], 1)
-    endif
-endfunction
+noremap <Leader>i :call VSCodeNotify("workbench.action.quickOpen", "/\Users/\jonathan.dewet/\AppData\Local\nvim\init.vim")
+
+
 
 " " <SPACE>   : forward to next word beginning with alphanumeric char
 " " <S-SPACE> : backward to prev word beginning with alphanumeric char
@@ -106,4 +123,5 @@ vnoremap <silent> b :<C-U>let g:_saved_search_reg=@/<CR>gv?\(^\\|\<\)[A-Za-z0-9_
 "         map <C-@> <S-SPACE>
 "     endif
 " endif
-" 
+ " 
+" autocmd! BufWritePost $MYVIMRC source $MYVIMRC | echom "Reloaded $NVIMRC"
