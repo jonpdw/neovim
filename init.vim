@@ -95,7 +95,7 @@ nnoremap z] :call VSCodeNotify("editor.unfoldRecursively")<CR>
 function! s:findInFiles()
     let startPos = getpos("v")
     let endPos = getpos(".")
-    call VSCodeNotifyRangePos("workbench., endPos[1], startPos[2], endPos[2], 1)
+    call VSCodeNotifyRangePos("workbench.action.findInFiles", startPos[1], endPos[1], startPos[2], endPos[2], 1)
 endfunction
 
 xnoremap <Leader><Leader> l<Cmd>call <SID>findInFiles()<CR>
