@@ -1,6 +1,13 @@
 " https://github.com/asvetliakov/vscode-neovim
+
 " Use PlugInstall to install in a real terminal to install new plugins
 " Plugins will be downloaded under the specified directory.
+"
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
 call plug#begin('~/.vim/plugged')
 
 " Declare the list of plugins.
@@ -12,14 +19,39 @@ Plug '/unblevable/quick-scope' "When f pressed highlight which letter to go to e
 Plug 'jeetsukumaran/vim-indentwise'
 Plug '/tpope/vim-repeat'
 Plug '/asvetliakov/vim-easymotion'
+Plug 'wellle/targets.vim'
+
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
-
+" ($this is a $test,{what is life} this is good )
 " Space Leader 
 let mapleader=" "
 
+" ===============================================================
+" VSCode 
+" ===============================================================
+
+" Toggle Parameter hints
+nnoremap <Leader>h :call VSCodeCall('parameterHints.toggle')<CR>
+
+" Open url under cursor - (g)o (l)ink
+nnoremap gl :call VSCodeCall('editor.action.openLink')<CR>
+
+" Fix moving up (j) and down (k) with folds
+if exists('g:vscode')
+nnoremap j :call VSCodeCall('cursorDown')<CR>
+nnoremap k :call VSCodeCall('cursorUp')<CR>
+endif
+
 " Save and source init.vim
 nnoremap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source C:\Users\jonathan.dewet\AppData\Local\nvim\init.vim<CR>
+
+" ===============================================================
+" Pure Vim
+" ===============================================================
+
+xnoremap <Leader>q :'<,'>normal! @q<CR>
+
 
 " Move default register to register a and b
 nnoremap <Leader>a :let @a=@"<CR>
@@ -38,8 +70,9 @@ nnoremap cc ddko
 " Select line but not whitespace and new line
 nnoremap <Leader>v ^v$h
 
+
 " ===============================================================
-" Plugins/Vscode
+" Plugins
 " ===============================================================
 
 " Indentwise
@@ -55,12 +88,6 @@ nnoremap zo :call VSCodeNotify("editor.toggleFold")<CR>
 nnoremap z[ :call VSCodeNotify("editor.foldRecursively")<CR>
 nnoremap z] :call VSCodeNotify("editor.unfoldRecursively")<CR>
 
-" VSCode
-" Fix moving up (j) and down (k) with folds
-if exists('g:vscode')
-nnoremap j :call VSCodeCall('cursorDown')<CR>
-nnoremap k :call VSCodeCall('cursorUp')<CR>
-endif
 
 " ===============================================================
 " Function
@@ -69,10 +96,11 @@ endif
 function! s:findInFiles()
     let startPos = getpos("v")
     let endPos = getpos(".")
-    call VSCodeNotifyRangePos("workbench.action.findInFiles", startPos[1], endPos[1], startPos[2], endPos[2], 1)
+    call VSCodeNotifyRangePos("workbench., endPos[1], startPos[2], endPos[2], 1)
 endfunction
 
 xnoremap <Leader><Leader> l<Cmd>call <SID>findInFiles()<CR>
+
 
 function! <SID>GotoPattern(pattern, dir) range
     let g:_saved_search_reg = @/
@@ -103,4 +131,3 @@ let g:neovide_cursor_animation_length=0
 highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline " Make sure colors work on VScode
 highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T'] " Only highlight when I press f or t
-
