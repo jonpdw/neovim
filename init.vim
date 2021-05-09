@@ -1,22 +1,21 @@
 " Use PlugInstall to install in a real terminal to install new plugins
 " Plugins will be downloaded under the specified directory.
 call plug#begin('~/.vim/plugged')
-
 " Declare the list of plugins.
 Plug 'tpope/vim-sensible'
 Plug 'junegunn/seoul256.vim' "Color Scheme
-Plug '/tpope/vim-surround'
-Plug 'dbakker/vim-paragraph-motion' "Ignore whitespace when doing paragraph jump
-Plug '/unblevable/quick-scope' "When f pressed highlight which letter to go to each word
+Plug 'tpope/vim-surround'
+Plug 'dbakker/vim-paragraph-motion' 
+Plug 'unblevable/quick-scope' 
 Plug 'jeetsukumaran/vim-indentwise'
-Plug '/tpope/vim-repeat'
-Plug '/asvetliakov/vim-easymotion'
+Plug 'tpope/vim-repeat'
+Plug 'asvetliakov/vim-easymotion'
+
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
 let g:neovide_cursor_trail_length=0
 let g:neovide_cursor_animation_length=0
-
 
 " QuickScope settings
 highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline " Make sure colors work on VScode
