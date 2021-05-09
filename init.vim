@@ -43,7 +43,7 @@ nnoremap k :call VSCodeCall('cursorUp')<CR>
 endif
 
 " Save and source init.vim
-nnoremap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source C:\Users\jonathan.dewet\AppData\Local\nvim\init.vim<CR>
+nnoremap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source $MYVIMRC<CR>
 
 " ===============================================================
 " Pure Vim
