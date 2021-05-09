@@ -1,5 +1,13 @@
+" https://github.com/asvetliakov/vscode-neovim
+
 " Use PlugInstall to install in a real terminal to install new plugins
 " Plugins will be downloaded under the specified directory.
+"
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
 call plug#begin('~/.vim/plugged')
 " Declare the list of plugins.
 Plug 'tpope/vim-sensible'
@@ -10,22 +18,23 @@ Plug 'unblevable/quick-scope'
 Plug 'jeetsukumaran/vim-indentwise'
 Plug 'tpope/vim-repeat'
 Plug 'asvetliakov/vim-easymotion'
+Plug 'wellle/targets.vim'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
+" ($this is a $test,{what is life} this is good )
+" Space Leader 
+let mapleader=" "
 
-let g:neovide_cursor_trail_length=0
-let g:neovide_cursor_animation_length=0
+" ===============================================================
+" VSCode 
+" ===============================================================
 
-" QuickScope settings
-highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline " Make sure colors work on VScode
-highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T'] " Only highlight when I press f or t
+" Toggle Parameter hints
+nnoremap <Leader>h :call VSCodeCall('parameterHints.toggle')<CR>
 
-" Folding
-nnoremap zo :call VSCodeNotify("editor.toggleFold")<CR>
-nnoremap z[ :call VSCodeNotify("editor.foldRecursively")<CR>
-nnoremap z] :call VSCodeNotify("editor.unfoldRecursively")<CR>
+" Open url under cursor - (g)o (l)ink
+nnoremap gl :call VSCodeCall('editor.action.openLink')<CR>
 
 " Fix moving up (j) and down (k) with folds
 if exists('g:vscode')
@@ -33,48 +42,65 @@ nnoremap j :call VSCodeCall('cursorDown')<CR>
 nnoremap k :call VSCodeCall('cursorUp')<CR>
 endif
 
-" Space Leader 
-let mapleader=" "
+" Save and source init.vim
+nnoremap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source C:\Users\jonathan.dewet\AppData\Local\nvim\init.vim<CR>
 
-map s <Plug>(easymotion-f2)
-map S <Plug>(easymotion-F2)
+" ===============================================================
+" Pure Vim
+" ===============================================================
 
-nnoremap cc ddko
-nnoremap <Leader>v ^v$h
-noremap L $
-noremap H ^
+xnoremap <Leader>q :'<,'>normal! @q<CR>
 
-let g:EasyMotion_smartcase = 1
-map <Leader>j <Plug>(IndentWisePreviousLesserIndent)
 
 " Move default register to register a and b
 nnoremap <Leader>a :let @a=@"<CR>
 nnoremap <Leader>b :let @b=@"<CR>
 
-" Create a new line with correct indendint
-nnoremap <Leader>o ddO
+" Easier end and beginging of line
+noremap L $
+noremap H ^
 
 " Select a function
 nnoremap <Leader>o va{oV
 
-function! s:openVSCodeCommandsInVisualMode()
-    normal! gv
-    let visualmode = visualmode()
-    if visualmode == "V"
-        let startLine = line("v")
-        let endLine = line(".")
-        call VSCodeNotifyRange("workbench.action.showCommands", startLine, endLine, 1)
-    else
-        let startPos = getpos("v")
-        let endPos = getpos(".")
-        call VSCodeNotifyRangePos("workbench.action.showCommands", startPos[1], endPos[1], startPos[2], endPos[2], 1)
-    endif
+" Clear line and indent properly 
+nnoremap cc ddko
+
+" Select line but not whitespace and new line
+nnoremap <Leader>v ^v$h
+
+
+" ===============================================================
+" Plugins
+" ===============================================================
+
+" Indentwise
+map <Leader>j <Plug>(IndentWisePreviousLesserIndent)
+
+" Easymotion
+map s <Plug>(easymotion-f2)
+map S <Plug>(easymotion-F2)
+let g:EasyMotion_smartcase = 1
+
+" Folding
+nnoremap zo :call VSCodeNotify("editor.toggleFold")<CR>
+nnoremap z[ :call VSCodeNotify("editor.foldRecursively")<CR>
+nnoremap z] :call VSCodeNotify("editor.unfoldRecursively")<CR>
+
+
+" ===============================================================
+" Function
+" ===============================================================
+
+function! s:findInFiles()
+    let startPos = getpos("v")
+    let endPos = getpos(".")
+    call VSCodeNotifyRangePos("workbench., endPos[1], startPos[2], endPos[2], 1)
 endfunction
 
-" " <SPACE>   : forward to next word beginning with alphanumeric char
-" " <S-SPACE> : backward to prev word beginning with alphanumeric char
-" " <C-SPACE> : same as above (as <S-SPACE> not available in console Vim
-" " <BS>      : back to prev word ending with alphanumeric char
+xnoremap <Leader><Leader> l<Cmd>call <SID>findInFiles()<CR>
+
+
 function! <SID>GotoPattern(pattern, dir) range
     let g:_saved_search_reg = @/
     let l:flags = "We"
@@ -86,23 +112,21 @@ function! <SID>GotoPattern(pattern, dir) range
     endfor
     let @/ = g:_saved_search_reg
 endfunction
+
 nnoremap <silent> w :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'f')<CR>
 vnoremap <silent> w :<C-U>let g:_saved_search_reg=@/<CR>gv/\(^\\|\<\)[A-Za-z0-9_]<CR>:<C-U>let @/=g:_saved_search_reg<CR>gv
 nnoremap <silent> b :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'b')<CR>
 vnoremap <silent> b :<C-U>let g:_saved_search_reg=@/<CR>gv?\(^\\|\<\)[A-Za-z0-9_]<CR>:<C-U>let @/=g:_saved_search_reg<CR>gv
-" nnoremap <silent> <BS> :call <SID>GotoPattern('[A-Za-z0-9_]\(\>\\|$\)', 'b')<CR>
-" vnoremap <silent> <BS> :<C-U>let g:_saved_search_reg=@/<CR>gv?[A-Za-z0-9_]\(\>\\|$\)<CR>:<C-U>let @/=g:_saved_search_reg<CR>gv
 
-" " Redundant mapping of <C-SPACE> to <S-SPACE> so that
-" " above mappings are available in console Vim.
-" "noremap <C-@> <C-B>
-" if has("gui_running")
-"     map <silent> <C-Space> <S-SPACE>
-" else
-"     if has("unix")
-"         map <Nul> <S-SPACE>
-"     else
-"         map <C-@> <S-SPACE>
-"     endif
-" endif
-" 
+" ===============================================================
+" Settings
+" ===============================================================
+
+" Disable annoying settings when using windows neovim client neovide
+let g:neovide_cursor_trail_length=0
+let g:neovide_cursor_animation_length=0
+
+" QuickScope settings
+highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline " Make sure colors work on VScode
+highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T'] " Only highlight when I press f or t
