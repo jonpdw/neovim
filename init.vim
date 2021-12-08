@@ -30,6 +30,20 @@ let mapleader=" "
 " VSCode 
 " ===============================================================
 
+" make a use-what-changed function
+nnoremap <Leader>r /]);<CR>yi[<C-o>OuseWhatChanged([<C-r>0], "<C-r>0");<ESC>
+" nnoremap <Leader>e  ^f[lywouseEffect(() => console.log("useEffect <C-r>0"), [<C-r>0]);<ESC>
+nnoremap <Leader>e  
+
+" Stage the selected line in the git commit
+nnoremap <Leader>g :call VSCodeCall('git.stageSelectedRanges')<CR>
+
+" UnStage the selected line in the git commit
+nnoremap <Leader>G :call VSCodeCall('git.unstageSelectedRanges')<CR>
+
+" Open Gitlens Compare in edit mode
+nnoremap go :call VSCodeCall('gitlens.openWorkingFile')<CR>
+
 " Toggle Parameter hints
 nnoremap <Leader>h :call VSCodeCall('parameterHints.toggle')<CR>
 
@@ -45,10 +59,33 @@ endif
 " Save and source init.vim
 nnoremap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source $MYVIMRC<CR>
 
+" Go to implimentation
+nnoremap gD :call VSCodeCall("editor.action.goToImplementation")<CR>
+
+" Show popup inline documentation
+nnoremap gp :call VSCodeCall("editor.action.showHover")<CR>
+
+" Move between splits
+nnoremap <Leader>h <Cmd>call VSCodeNotify('workbench.action.focusLeftGroup')<CR>
+nnoremap <Leader>l <Cmd>call VSCodeNotify('workbench.action.focusRightGroup')<CR>
+
+" Move window to make split
+nnoremap <Leader>H <Cmd>call VSCodeNotify('workbench.action.moveEditorToLeftGroup')<CR>
+nnoremap <Leader>L <Cmd>call VSCodeNotify('workbench.action.moveEditorToRightGroup')<CR>
+
+" Toggle sidebar
+nnoremap <Leader>d <Cmd>call VSCodeNotify('workbench.action.toggleSidebarVisibility')<CR>
+
 " ===============================================================
 " Pure Vim
 " ===============================================================
 
+" Paste last yank 
+nnoremap <Leader>p "0p
+
+
+
+" Run macro over selected lines
 xnoremap <Leader>q :'<,'>normal! @q<CR>
 
 
@@ -69,24 +106,30 @@ nnoremap cc ddko
 " Select line but not whitespace and new line
 nnoremap <Leader>v ^v$h
 
+" Make Control+w (used for window switching) easier to press
+nmap <Leader>f <C-w>
+
 
 " ===============================================================
 " Plugins
 " ===============================================================
 
 " Indentwise
-map <Leader>j <Plug>(IndentWisePreviousLesserIndent)
+" map <Leader>j <Plug>(IndentWisePreviousLesserIndent)
 
 " Easymotion
-map s <Plug>(easymotion-f2)
+map s <Plug>(easymotion-s2)
 map S <Plug>(easymotion-F2)
 let g:EasyMotion_smartcase = 1
+let g:EasyMotion_use_smartsign_us = 1
+
 
 " Folding
 nnoremap zo :call VSCodeNotify("editor.toggleFold")<CR>
 nnoremap z[ :call VSCodeNotify("editor.foldRecursively")<CR>
 nnoremap z] :call VSCodeNotify("editor.unfoldRecursively")<CR>
 
+nnoremap zz <Cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<CR>
 
 " ===============================================================
 " Function
