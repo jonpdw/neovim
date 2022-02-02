@@ -8,27 +8,42 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
 
+
 call plug#begin('~/.vim/plugged')
 " Declare the list of plugins.
 Plug 'tpope/vim-sensible'
 Plug 'junegunn/seoul256.vim' "Color Scheme
 Plug 'tpope/vim-surround'
-Plug 'dbakker/vim-paragraph-motion' 
+" Plug 'dbakker/vim-paragraph-motion' 
 Plug 'unblevable/quick-scope' 
 Plug 'jeetsukumaran/vim-indentwise'
 Plug 'tpope/vim-repeat'
 Plug 'asvetliakov/vim-easymotion'
 Plug 'wellle/targets.vim'
 
-" List ends here. Plugins become visible to Vim after this call.
+" " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
-" ($this is a $test,{what is life} this is good )
+
+" ==============================================================
+" Settings
+" ==============================================================
+
 " Space Leader 
 let mapleader=" "
+
+" when searching make it case insensitive 
+" set ignorecase
+" but if I use capitals then respect them
+" set smartcase
+
+" don't use regex in search
+" set nomagic
 
 " ===============================================================
 " VSCode 
 " ===============================================================
+
+nnoremap <Leader>f :call VSCodeCall('favorites.browse')<CR>
 
 " make a use-what-changed function
 nnoremap <Leader>r /]);<CR>yi[<C-o>OuseWhatChanged([<C-r>0], "<C-r>0");<ESC>
@@ -36,10 +51,11 @@ nnoremap <Leader>r /]);<CR>yi[<C-o>OuseWhatChanged([<C-r>0], "<C-r>0");<ESC>
 nnoremap <Leader>e  
 
 " Stage the selected line in the git commit
-nnoremap <Leader>g :call VSCodeCall('git.stageSelectedRanges')<CR>
+" nnoremap <Leader>g :call VSCodeCall('git.stageSelectedRanges')<CR>
+map <Leader>g <Cmd>call VSCodeNotifyVisual('git.stageSelectedRanges', 1)<CR>
 
 " UnStage the selected line in the git commit
-nnoremap <Leader>G :call VSCodeCall('git.unstageSelectedRanges')<CR>
+" nnoremap <Leader>G :call VSCodeCall('git.unstageSelectedRanges')<CR>
 
 " Open Gitlens Compare in edit mode
 nnoremap go :call VSCodeCall('gitlens.openWorkingFile')<CR>
@@ -49,12 +65,6 @@ nnoremap <Leader>h :call VSCodeCall('parameterHints.toggle')<CR>
 
 " Open url under cursor - (g)o (l)ink
 nnoremap gl :call VSCodeCall('editor.action.openLink')<CR>
-
-" Fix moving up (j) and down (k) with folds
-if exists('g:vscode')
-nnoremap j :call VSCodeCall('cursorDown')<CR>
-nnoremap k :call VSCodeCall('cursorUp')<CR>
-endif
 
 " Save and source init.vim
 nnoremap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source $MYVIMRC<CR>
@@ -73,21 +83,38 @@ nnoremap <Leader>l <Cmd>call VSCodeNotify('workbench.action.focusRightGroup')<CR
 nnoremap <Leader>H <Cmd>call VSCodeNotify('workbench.action.moveEditorToLeftGroup')<CR>
 nnoremap <Leader>L <Cmd>call VSCodeNotify('workbench.action.moveEditorToRightGroup')<CR>
 
-" Toggle sidebar
-nnoremap <Leader>d <Cmd>call VSCodeNotify('workbench.action.toggleSidebarVisibility')<CR>
+nnoremap <Leader>k <Cmd>call VSCodeNotify('workbench.action.nextEditor')<CR>
+nnoremap <Leader>j <Cmd>call VSCodeNotify('workbench.action.previousEditor')<CR>
+
+" Copy laste delte to clipboard
+nnoremap <Leader>d :let @0=@"<CR>
+
+" Move between tabs
+nnoremap <A-j> :call VSCodeCall('cursorDown')<CR>
+nnoremap <A-k> :call VSCodeCall('cursorUp')<CR>
+
+" don't use the old tab
+nnoremap gt <ESC>
+nnoremap gT <ESC>
 
 " ===============================================================
 " Pure Vim
 " ===============================================================
+" when yarking in visual mode put in both system and vim clipboard
+vnoremap y ygv"+y
 
-" Paste last yank 
-nnoremap <Leader>p "0p
+" paste system clipboard
+nnoremap <Leader>p "+p
 
+" copy everything to the clipboard
+nnoremap <Leader>0 :%y+<CR>
+nnoremap <C-a> :%y+<CR>
 
+" " Paste last yank 
+" nnoremap <Leader>p "0p
 
 " Run macro over selected lines
 xnoremap <Leader>q :'<,'>normal! @q<CR>
-
 
 " Move default register to register a and b
 nnoremap <Leader>a :let @a=@"<CR>
@@ -106,16 +133,12 @@ nnoremap cc ddko
 " Select line but not whitespace and new line
 nnoremap <Leader>v ^v$h
 
-" Make Control+w (used for window switching) easier to press
-nmap <Leader>f <C-w>
 
 
 " ===============================================================
 " Plugins
 " ===============================================================
 
-" Indentwise
-" map <Leader>j <Plug>(IndentWisePreviousLesserIndent)
 
 " Easymotion
 map s <Plug>(easymotion-s2)
@@ -123,13 +146,35 @@ map S <Plug>(easymotion-F2)
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_use_smartsign_us = 1
 
-
 " Folding
 nnoremap zo :call VSCodeNotify("editor.toggleFold")<CR>
 nnoremap z[ :call VSCodeNotify("editor.foldRecursively")<CR>
 nnoremap z] :call VSCodeNotify("editor.unfoldRecursively")<CR>
 
 nnoremap zz <Cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<CR>
+
+" IndentWise =====================================================
+
+" Move up and down on the same indentation level 
+map <Leader>[ <Plug>(IndentWiseBlockScopeBoundaryBegin)
+map <Leader>] <Plug>(IndentWiseBlockScopeBoundaryEnd)
+ 
+" Move out
+map { <Plug>(IndentWisePreviousLesserIndent) 
+" Move in
+map } <Plug>(IndentWiseNextGreaterIndent)
+
+" Run map every time a file is loaded as it can get remapped and we want to use [ and ] with no waiting
+function! MakeBracketMaps()
+    map <nowait> ] <Plug>(IndentWiseNextEqualIndent)
+    map <nowait> [ <Plug>(IndentWisePreviousEqualIndent)
+    " https://vi.stackexchange.com/a/13406
+endfunction
+
+augroup bracketmaps
+    autocmd!
+    autocmd BufEnter * call MakeBracketMaps()
+augroup END
 
 " ===============================================================
 " Function
@@ -145,6 +190,7 @@ xnoremap <Leader><Leader> l<Cmd>call <SID>findInFiles()<CR>
 
 
 function! <SID>GotoPattern(pattern, dir) range
+    set magic
     let g:_saved_search_reg = @/
     let l:flags = "We"
     if a:dir == "b"
@@ -154,6 +200,7 @@ function! <SID>GotoPattern(pattern, dir) range
         call search(a:pattern, l:flags)
     endfor
     let @/ = g:_saved_search_reg
+    set nomagic
 endfunction
 
 nnoremap <silent> w :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'f')<CR>
@@ -173,3 +220,8 @@ let g:neovide_cursor_animation_length=0
 highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline " Make sure colors work on VScode
 highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T'] " Only highlight when I press f or t
+
+
+" ===============================================================
+" Removed
+" ===============================================================
