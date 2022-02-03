@@ -21,7 +21,6 @@ Plug 'asvetliakov/vim-easymotion'           " Quickly find stuff
 Plug 'wellle/targets.vim'                   " Delete arguments object
 Plug 'tommcdo/vim-lion'                     " Allign comments
 Plug 'michaeljsmith/vim-indent-object'      " Indent object
-Plug 'kana/vim-textobj-user'
 
 " Plug 'dbakker/vim-paragraph-motion' 
 
@@ -44,7 +43,13 @@ set smartcase " but if I use capitals then respect them
 " nnoremap <Leader>r /]);<CR>yi[<C-o>OuseWhatChanged([<C-r>0], "<C-r>0");<ESC>
 " nnoremap <Leader>e  ^f[lywouseEffect(() => console.log("useEffect <C-r>0"), [<C-r>0]);<ESC>
 
+" search favorites
 nmap <Leader>f <Cmd>call VSCodeCall('favorites.browse')<CR>
+
+nmap <Leader>g <Cmd>call VSCodeCall('workbench.action.quickOpen')<CR>
+
+" serach all files
+nmap <Leader>p <Cmd>call VSCodeCall('favorites.browse')<CR>
 nmap gl <Cmd>call VSCodeCall('editor.action.openLink')<CR>
 
 " Save and source init.vim
@@ -142,17 +147,17 @@ nnoremap zz <Cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<CR>
 map <Leader>[ <Plug>(IndentWiseBlockScopeBoundaryBegin)
 map <Leader>] <Plug>(IndentWiseBlockScopeBoundaryEnd)
  
-" Move out
-map { <Plug>(IndentWisePreviousLesserIndent)
-" Move in
-map } <Plug>(IndentWiseNextGreaterIndent)
+map } <Plug>(IndentWiseNextEqualIndent)
+map { <Plug>(IndentWisePreviousEqualIndent)
 
 " Run map every time a file is loaded as it can get remapped and we want to use [ and ] with no waiting
 function! MakeBracketMaps()
     " nnoremap <silent><nowait><buffer> ] <Plug>(IndentWiseNextEqualIndent)
     " nnoremap <silent><nowait><buffer> [ <Plug>(IndentWisePreviousEqualIndent)
-    map <nowait> ] <Plug>(IndentWiseNextEqualIndent)
-    map <nowait> [ <Plug>(IndentWisePreviousEqualIndent)
+    " map <nowait> } <Plug>(IndentWiseNextEqualIndent)
+    " map <nowait> { <Plug>(IndentWisePreviousEqualIndent)
+    map <nowait> [ <Plug>(IndentWisePreviousLesserIndent) " Move out
+    map <nowait> ] <Plug>(IndentWiseNextGreaterIndent) " Move in
     " https://vi.stackexchange.com/a/13406
 endfunction
 
@@ -216,4 +221,4 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T'] " Only highlight when I press 
 
 " cool example showing how to send the visual selection to VSCode
 " command! FindInFileS call VSCodeNotify('workbench.action.findInFiles', {'query': @p})
-" xnoremap <silent> <Leader>f "py<Esc>:FindInFileS<CR>
+" xnoremap <silent> <Leader>1 "py<Esc>:FindInFileS<CR>
