@@ -12,18 +12,21 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 call plug#begin('~/.vim/plugged')
 " Declare the list of plugins.
 Plug 'tpope/vim-sensible'
-Plug 'junegunn/seoul256.vim' "Color Scheme
-Plug 'tpope/vim-surround'
+Plug 'junegunn/seoul256.vim'                " Color Scheme
+Plug 'tpope/vim-surround'                   " Change surrounding characters
+Plug 'unblevable/quick-scope'               " Line find with highlighting
+Plug 'jeetsukumaran/vim-indentwise'         " Move to next place same indentation
+Plug 'tpope/vim-repeat'                     " Not sure
+Plug 'asvetliakov/vim-easymotion'           " Quickly find stuff
+Plug 'wellle/targets.vim'                   " Delete arguments object
+Plug 'tommcdo/vim-lion'                     " Allign comments
+Plug 'michaeljsmith/vim-indent-object'      " Indent object
+Plug 'kana/vim-textobj-user'
+
 " Plug 'dbakker/vim-paragraph-motion' 
-Plug 'unblevable/quick-scope' 
-Plug 'jeetsukumaran/vim-indentwise'
-Plug 'tpope/vim-repeat'
-Plug 'asvetliakov/vim-easymotion'
-Plug 'wellle/targets.vim'
 
 " " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
-
 " ==============================================================
 " Settings
 " ==============================================================
@@ -31,65 +34,43 @@ call plug#end()
 " Space Leader 
 let mapleader=" "
 
-" when searching make it case insensitive 
-" set ignorecase
-" but if I use capitals then respect them
-" set smartcase
-
-" don't use regex in search
-" set nomagic
+set ignorecase " when searching make it case insensitive 
+set smartcase " but if I use capitals then respect them
 
 " ===============================================================
 " VSCode 
 " ===============================================================
 
-nnoremap <Leader>f :call VSCodeCall('favorites.browse')<CR>
-
-" make a use-what-changed function
-nnoremap <Leader>r /]);<CR>yi[<C-o>OuseWhatChanged([<C-r>0], "<C-r>0");<ESC>
+" nnoremap <Leader>r /]);<CR>yi[<C-o>OuseWhatChanged([<C-r>0], "<C-r>0");<ESC>
 " nnoremap <Leader>e  ^f[lywouseEffect(() => console.log("useEffect <C-r>0"), [<C-r>0]);<ESC>
-nnoremap <Leader>e  
 
-" Stage the selected line in the git commit
-" nnoremap <Leader>g :call VSCodeCall('git.stageSelectedRanges')<CR>
-map <Leader>g <Cmd>call VSCodeNotifyVisual('git.stageSelectedRanges', 1)<CR>
-
-" UnStage the selected line in the git commit
-" nnoremap <Leader>G :call VSCodeCall('git.unstageSelectedRanges')<CR>
-
-" Open Gitlens Compare in edit mode
-nnoremap go :call VSCodeCall('gitlens.openWorkingFile')<CR>
-
-" Toggle Parameter hints
-nnoremap <Leader>h :call VSCodeCall('parameterHints.toggle')<CR>
-
-" Open url under cursor - (g)o (l)ink
-nnoremap gl :call VSCodeCall('editor.action.openLink')<CR>
+nmap <Leader>f <Cmd>call VSCodeCall('favorites.browse')<CR>
+nmap gl <Cmd>call VSCodeCall('editor.action.openLink')<CR>
 
 " Save and source init.vim
-nnoremap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source $MYVIMRC<CR>
+nmap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source $MYVIMRC<CR>
 
 " Go to implimentation
-nnoremap gD :call VSCodeCall("editor.action.goToImplementation")<CR>
+nmap gD :call VSCodeCall("editor.action.goToImplementation")<CR>
 
 " Show popup inline documentation
-nnoremap gp :call VSCodeCall("editor.action.showHover")<CR>
+nmap gp :call VSCodeCall("editor.action.showHover")<CR>
 
 " Move between splits
-nnoremap <Leader>h <Cmd>call VSCodeNotify('workbench.action.focusLeftGroup')<CR>
-nnoremap <Leader>l <Cmd>call VSCodeNotify('workbench.action.focusRightGroup')<CR>
+nmap <Leader>h <Cmd>call VSCodeNotify('workbench.action.focusLeftGroup')<CR>
+nmap <Leader>l <Cmd>call VSCodeNotify('workbench.action.focusRightGroup')<CR>
 
 " Move window to make split
-nnoremap <Leader>H <Cmd>call VSCodeNotify('workbench.action.moveEditorToLeftGroup')<CR>
-nnoremap <Leader>L <Cmd>call VSCodeNotify('workbench.action.moveEditorToRightGroup')<CR>
+nmap <Leader>H <Cmd>call VSCodeNotify('workbench.action.moveEditorToLeftGroup')<CR>
+nmap <Leader>L <Cmd>call VSCodeNotify('workbench.action.moveEditorToRightGroup')<CR>
 
-nnoremap <Leader>k <Cmd>call VSCodeNotify('workbench.action.nextEditor')<CR>
-nnoremap <Leader>j <Cmd>call VSCodeNotify('workbench.action.previousEditor')<CR>
+nmap <Leader>k <Cmd>call VSCodeNotify('workbench.action.nextEditor')<CR>
+nmap <Leader>j <Cmd>call VSCodeNotify('workbench.action.previousEditor')<CR>
 
-" Copy laste delte to clipboard
+" Copy laste delete to clipboard
 nnoremap <Leader>d :let @0=@"<CR>
 
-" Move between tabs
+" Move without opening fold
 nnoremap <A-j> :call VSCodeCall('cursorDown')<CR>
 nnoremap <A-k> :call VSCodeCall('cursorUp')<CR>
 
@@ -100,14 +81,18 @@ nnoremap gT <ESC>
 " ===============================================================
 " Pure Vim
 " ===============================================================
+" Open vimrc 
+nnoremap <Leader>r :Edit $MYVIMRC<cr>
+
 " when yarking in visual mode put in both system and vim clipboard
 vnoremap y ygv"+y
 
 " paste system clipboard
-nnoremap <Leader>p "+p
+map <Leader>p "+p
 
 " copy everything to the clipboard
-nnoremap <Leader>0 :%y+<CR>
+" nnoremap <Leader>0 :%y+<CR>
+nnoremap <Leader>0 GVgg
 nnoremap <C-a> :%y+<CR>
 
 " " Paste last yank 
@@ -124,8 +109,8 @@ nnoremap <Leader>b :let @b=@"<CR>
 noremap L $
 noremap H ^
 
-" Select a function
-nnoremap <Leader>o va{oV
+" Select inner indentation
+nmap <Leader>o vii
 
 " Clear line and indent properly 
 nnoremap cc ddko
@@ -134,11 +119,9 @@ nnoremap cc ddko
 nnoremap <Leader>v ^v$h
 
 
-
 " ===============================================================
 " Plugins
 " ===============================================================
-
 
 " Easymotion
 map s <Plug>(easymotion-s2)
@@ -153,19 +136,21 @@ nnoremap z] :call VSCodeNotify("editor.unfoldRecursively")<CR>
 
 nnoremap zz <Cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<CR>
 
-" IndentWise =====================================================
+" == IndentWise =================================================
 
 " Move up and down on the same indentation level 
 map <Leader>[ <Plug>(IndentWiseBlockScopeBoundaryBegin)
 map <Leader>] <Plug>(IndentWiseBlockScopeBoundaryEnd)
  
 " Move out
-map { <Plug>(IndentWisePreviousLesserIndent) 
+map { <Plug>(IndentWisePreviousLesserIndent)
 " Move in
 map } <Plug>(IndentWiseNextGreaterIndent)
 
 " Run map every time a file is loaded as it can get remapped and we want to use [ and ] with no waiting
 function! MakeBracketMaps()
+    " nnoremap <silent><nowait><buffer> ] <Plug>(IndentWiseNextEqualIndent)
+    " nnoremap <silent><nowait><buffer> [ <Plug>(IndentWisePreviousEqualIndent)
     map <nowait> ] <Plug>(IndentWiseNextEqualIndent)
     map <nowait> [ <Plug>(IndentWisePreviousEqualIndent)
     " https://vi.stackexchange.com/a/13406
@@ -176,21 +161,24 @@ augroup bracketmaps
     autocmd BufEnter * call MakeBracketMaps()
 augroup END
 
+command! FindVSCodeVisualSelectioN call VSCodeNotify('editor.actions.findWithArgs', {'searchString': @p})
+vmap <silenct> \f "py<Esc>:FindVSCodeVisualSelectioN<CR>
+command! FindVSCode call VSCodeCall('actions.find')
+nnoremap <silent> \f "py<Esc>:FindVSCode<CR>
+
+" Open VSCode find in all files 
+command! FindInFileS call VSCodeNotify('workbench.action.findInFiles', {'query': @p})
+xnoremap <silent> \s "py<Esc>:FindInFileS<CR>
+command! FindInFilesNoInput call VSCodeCall('workbench.action.findInFiles')
+nnoremap <silent> \s "py<Esc>:FindInFilesNoInput<CR>
+
 " ===============================================================
 " Function
 " ===============================================================
 
-function! s:findInFiles()
-    let startPos = getpos("v")
-    let endPos = getpos(".")
-    call VSCodeNotifyRangePos("workbench.action.findInFiles", startPos[1], endPos[1], startPos[2], endPos[2], 1)
-endfunction
-
-xnoremap <Leader><Leader> l<Cmd>call <SID>findInFiles()<CR>
-
 
 function! <SID>GotoPattern(pattern, dir) range
-    set magic
+    " set magic
     let g:_saved_search_reg = @/
     let l:flags = "We"
     if a:dir == "b"
@@ -200,7 +188,7 @@ function! <SID>GotoPattern(pattern, dir) range
         call search(a:pattern, l:flags)
     endfor
     let @/ = g:_saved_search_reg
-    set nomagic
+    " set nomagic
 endfunction
 
 nnoremap <silent> w :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'f')<CR>
@@ -225,3 +213,7 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T'] " Only highlight when I press 
 " ===============================================================
 " Removed
 " ===============================================================
+
+" cool example showing how to send the visual selection to VSCode
+" command! FindInFileS call VSCodeNotify('workbench.action.findInFiles', {'query': @p})
+" xnoremap <silent> <Leader>f "py<Esc>:FindInFileS<CR>
