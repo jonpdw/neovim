@@ -43,6 +43,9 @@ set smartcase " but if I use capitals then respect them
 " nnoremap <Leader>r /]);<CR>yi[<C-o>OuseWhatChanged([<C-r>0], "<C-r>0");<ESC>
 " nnoremap <Leader>e  ^f[lywouseEffect(() => console.log("useEffect <C-r>0"), [<C-r>0]);<ESC>
 
+" Open Gitlens Compare in edit mode
+nmap go <Cmd>call VSCodeCall('gitlens.openWorkingFile')<CR>
+
 " search favorites
 nmap <Leader>f <Cmd>call VSCodeCall('favorites.browse')<CR>
 
@@ -50,20 +53,19 @@ nmap <Leader>g <Cmd>call VSCodeCall('workbench.action.quickOpen')<CR>
 
 " serach all files
 nmap <Leader>p <Cmd>call VSCodeCall('favorites.browse')<CR>
-nmap gl <Cmd>call VSCodeCall('editor.action.openLink')<CR>
+
+nmap g8 <Cmd>call VSCodeCall('editor.action.openLink')<CR>
 
 " Save and source init.vim
-nmap <Leader>s :call VSCodeCall("workbench.action.files.save")<CR>:source $MYVIMRC<CR>
-
-" Go to implimentation
-nmap gD :call VSCodeCall("editor.action.goToImplementation")<CR>
+nmap <Leader>s <Cmd>call VSCodeCall("workbench.action.files.save")<CR>:source $MYVIMRC<CR>
 
 " Show popup inline documentation
-nmap gp :call VSCodeCall("editor.action.showHover")<CR>
+nmap gp <Cmd>call VSCodeCall("editor.action.showHover")<CR>
 
 " Move between splits
-nmap <Leader>h <Cmd>call VSCodeNotify('workbench.action.focusLeftGroup')<CR>
-nmap <Leader>l <Cmd>call VSCodeNotify('workbench.action.focusRightGroup')<CR>
+" nmap <Leader>h <Cmd>call VSCodeNotify('workbench.action.focusLeftGroup')<CR>
+nmap <Leader>h <Cmd>call VSCodeNotify('multiCommand.moveLeft')<CR>
+nmap <Leader>l <Cmd>call VSCodeNotify('multiCommand.moveRight')<CR>
 
 " Move window to make split
 nmap <Leader>H <Cmd>call VSCodeNotify('workbench.action.moveEditorToLeftGroup')<CR>
@@ -76,8 +78,8 @@ nmap <Leader>j <Cmd>call VSCodeNotify('workbench.action.previousEditor')<CR>
 nnoremap <Leader>d :let @0=@"<CR>
 
 " Move without opening fold
-nnoremap <A-j> :call VSCodeCall('cursorDown')<CR>
-nnoremap <A-k> :call VSCodeCall('cursorUp')<CR>
+nnoremap <A-j> <Cmd>call VSCodeCall('cursorDown')<CR>
+nnoremap <A-k> <Cmd>call VSCodeCall('cursorUp')<CR>
 
 " don't use the old tab
 nnoremap gt <ESC>
@@ -86,6 +88,13 @@ nnoremap gT <ESC>
 " ===============================================================
 " Pure Vim
 " ===============================================================
+" 
+
+" make a console.log with selected text
+noremap <Leader>c yoconsole.log("<C-r>0");<ESC>"
+
+nmap <C-c> j
+
 " Open vimrc 
 nnoremap <Leader>r :Edit $MYVIMRC<cr>
 
@@ -135,11 +144,11 @@ let g:EasyMotion_smartcase = 1
 let g:EasyMotion_use_smartsign_us = 1
 
 " Folding
-nnoremap zo :call VSCodeNotify("editor.toggleFold")<CR>
-nnoremap z[ :call VSCodeNotify("editor.foldRecursively")<CR>
-nnoremap z] :call VSCodeNotify("editor.unfoldRecursively")<CR>
+nnoremap zo <Cmd>call VSCodeNotify("editor.toggleFold")<CR>
+nnoremap z[ <Cmd>call VSCodeNotify("editor.foldRecursively")<CR>
+nnoremap z] <Cmd>call VSCodeNotify("editor.unfoldRecursively")<CR>
 
-nnoremap zz <Cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<CR>
+
 
 " == IndentWise =================================================
 
@@ -166,10 +175,31 @@ augroup bracketmaps
     autocmd BufEnter * call MakeBracketMaps()
 augroup END
 
+
+augroup filetype_csharp
+    autocmd!
+    " Go to the actual implimentation of a method in c# files
+    autocmd FileType cs nmap <buffer> gd <Cmd>call VSCodeCall("editor.action.goToImplementation")<CR>
+    autocmd FileType cs nmap <buffer> gD <Cmd>call VSCodeCall("editor.action.revealDefinition")<CR>
+augroup END
+
+function! QuickNotes()
+    %y+
+    call VSCodeNotify('workbench.action.revertAndCloseActiveEditor')
+endfunction
+
+nnoremap zz <Cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<CR>
+" nnoremap zz <Cmd>call QuickNotes()<CR>
+
+augroup quick_notes_close
+    autocmd!
+    autocmd BufEnter */scratch/*Untitled* nnoremap <buffer> zz <Cmd>call QuickNotes()<Cr>
+augroup END
+
 command! FindVSCodeVisualSelectioN call VSCodeNotify('editor.actions.findWithArgs', {'searchString': @p})
-vmap <silenct> \f "py<Esc>:FindVSCodeVisualSelectioN<CR>
 command! FindVSCode call VSCodeCall('actions.find')
 nnoremap <silent> \f "py<Esc>:FindVSCode<CR>
+xnoremap <silent> \f "py<Esc>:FindVSCodeVisualSelectioN<CR>
 
 " Open VSCode find in all files 
 command! FindInFileS call VSCodeNotify('workbench.action.findInFiles', {'query': @p})
