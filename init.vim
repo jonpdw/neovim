@@ -54,134 +54,10 @@ set smartcase " but if I use capitals then respect them
 nmap <Leader>x ?={<CR>llvi{yva{c{extracted}<Esc>?e the old tab
 nnoremap gt eturn (<CR>Oconst extracted = ;<Esc>"0P
 
-remap gT 
 " Open Gitlens Compare in edit mode
-emap go <Cmd>call VSCodeCall('gitlens.openWorkingFile')<CR>
+nmap go <Cmd>call VSCodeCall('gitlens.openWorkingFile')<CR>
 
- up and own
- " nnoremap K :m .-2
- " ==
- " " nnoremap J :m .+1
- " ==
- " " vnoremap K :m 'gv=gv
- " " vnoremap J :m '>+1
- " gv=gv
- "  
- "  " make a console.log with selected text
- "  noremap c yoconsole.log("    autocmd FileType cs nmap <buffer> gd
- "  <Cmd>call VSCodeCall("editor.action.goToImplementation")<CR>
- "  ");
- pen vimrc 
- nnoremap r :Edit $MYVIMRC
-
-
- " when yarking in visual mode put in both system and vim clipboard
- " vnoremap y ygv"+y
- "
- " " paste system clipboard
- " map p "+p
- "
- " " copy everything to the clipboard
- " " nnoremap 0 :%y+
- "
- " nnoremap 0 GVgg
- " nnoremap  up and own
- " " nnoremap K :m .-2
- " ==
- " " nnoremap J :m .+1
- " ==
- " " vnoremap K :m 'gv=gv
- " " vnoremap J :m '>+1
- " gv=gv
- "  
- "  " make a console.log with selected text
- "  noremap c yoconsole.log("    autocmd FileType cs nmap <buffer> gd
- "  <Cmd>call VSCodeCall("editor.action.goToImplementation")<CR>
- "  "); :%y+
- "
- "
- "  " " Paste last yank 
- "  " nnoremap p "0p
- "
- "  " Run macro over selected lines
- "  xnoremap q :'normal! @q
- "
- "
- "  " Move default register to register a and b
- "  nnoremap a :let @a=@"
- "
- "  nnoremap b :let @b=@"
- "
- "
- "  " Easier end and beginging of line
- "  noremap L $
- "  noremap H ^
- "
- "  " Select inner indentation
- "  nmap o vii
- "
- "  " Clear line and indent properly 
- "  nnoremap cc ddko
- "
- "  " Select line but not whitespace and new line
- "  nnoremap v ^v$h
- "
- "
- "  " ===============================================================
- "  " Plugins
- "  " ===============================================================
- "
- "  " Easymotion
- "  map s <Plug>(easymotion-s2)
- "  map S <Plug>(easymotion-F2)
- "  let g:EasyMotion_smartcase = 1
- "  let g:EasyMotion_use_smartsign_us = 1
- "
- "  " Folding
- "  nnoremap zo 
- "  nnoremap z[ 
- "  nnoremap z] 
- "
- "
- "  " == IndentWise =================================================
- "
- "  " Move up and down on the same indentation level 
- "  map [ <Plug>(IndentWiseBlockScopeBoundaryBegin)
- "  map ] <Plug>(IndentWiseBlockScopeBoundaryEnd)
- "   
- "   map } <Plug>(IndentWiseNextEqualIndent)
- "   map { <Plug>(IndentWisePreviousEqualIndent)
- "
- "   " Run map every time a file is loaded as it can get remapped and we want
- "   to use [ and ] with no waiting
- "   function! MakeBracketMaps()
- "       " nnoremap  ] <Plug>(IndentWiseNextEqualIndent)
- "           " nnoremap  [ <Plug>(IndentWisePreviousEqualIndent)
- "               " map  } <Plug>(IndentWiseNextEqualIndent)
- "                   " map  { <Plug>(IndentWisePreviousEqualIndent)
- "                       map  [ <Plug>(IndentWisePreviousLesserIndent) " Move
- "                       out
- "                           map  ] <Plug>(IndentWiseNextGreaterIndent) " Move
- "                           in
- "                               " https://vi.stackexchange.com/a/13406
- "                               endfunction
- "
- "                               augroup bracketmaps
- "                                   autocmd!
- "                                       autocmd BufEnter * call
- "                                       MakeBracketMaps()
- "                                       augroup END
- "
- "
- "                                       augroup filetype_csharp
- "                                           autocmd!
- "                                               " Go to the actual
- "                                               implimentation of a method in
- "                                               c# files
- "                                                   autocmd FileType cs nmap
- "                                                   gd 
- "                                                       autocmd FileType cs
- "                                                       nmap  gD 
+" search favorites
 nmap <Leader>f <Cmd>call VSCodeCall('favorites.browse')<CR>
 
 nmap <Leader>g <Cmd>call VSCodeCall('workbench.action.quickOpen')<CR>
@@ -387,12 +263,6 @@ endfunction
 vmap J <Esc>:call MoveVisualSelection("Down")<cr>
 vmap K <Esc>:call MoveVisualSelection("Up")<cr>
 
-"
-" 
-" 123
-" abc
-"
-"
 
 " ===============================================================
 " Function
