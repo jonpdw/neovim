@@ -1,0 +1,77 @@
+Rsl.Client.ServiceRequestException: Request failed - Internal Server Error - System.NullReferenceException: Object reference not set to an instance of an object.
+   at SqlManager.Service.Services.SchedulerService.<>c__DisplayClass3_0.<GetScheduleGridDataByUser>b__1(ScheduleGridInitialSummary x) in C:\RAMM_Git\SQL_Manager\Sql Manager\src\service\SqlManager.Service\Services\SchedulerService.cs:line 31
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at SqlManager.Service.Services.SchedulerService.GetScheduleGridDataByUser(ScheduleGridRequest request) in C:\RAMM_Git\SQL_Manager\Sql Manager\src\service\SqlManager.Service\Services\SchedulerService.cs:line 29
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Builder.Extensions.MapWhenMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+
+HEADERS
+=======
+Connection: Keep-Alive
+Content-Type: application/json; charset=utf-8
+Authorization: Bearer localDebugAuthKey
+Host: localhost:3008
+Request-Id: |16d0b5250b22734abf7bfeee81770e1e.0769398716575840.
+traceparent: 00-16d0b5250b22734abf7bfeee81770e1e-0769398716575840-00
+Content-Length: 24
+userIdentity: {"Token":"a8328319-5fa3-4e97-8870-00569d748596","KeyState":0,"Expires":"0001-01-01T00:00:00","Username":"jondewet","ContactNumber":0,"IsRammStaff":true,"IsValid":true,"OrganisationId":999,"Database":{"DatabaseName":"rsl_takapuna","DatabaseDescription":"RSL Takapuna 1 - Test Farm (rsl_takapuna)","DatabaseNumber":6672,"ServerName":"sql.rammdev.net"}}
+MS-ASPNETCORE-TOKEN: 8b81b616-05dd-4b2f-9341-3df6c2198e1b
+X-Original-Proto: http
+X-Original-For: 127.0.0.1:63619
+
+   at SqlManager.Client.AbstractServiceClient.VerifyStatus(HttpResponseMessage response) in C:\RAMM_Git\SQL_Manager\Sql Manager\SqlManager.Client\AbstractServiceClient.cs:line 129
+   at SqlManager.Client.AbstractServiceClient.GetResponseData[T](HttpResponseMessage response) in C:\RAMM_Git\SQL_Manager\Sql Manager\SqlManager.Client\AbstractServiceClient.cs:line 110
+   at SqlManager.Client.AbstractServiceClient.Post[T](String path, Object data) in C:\RAMM_Git\SQL_Manager\Sql Manager\SqlManager.Client\AbstractServiceClient.cs:line 82
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Builder.Extensions.MapWhenMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+
+HEADERS
+=======
+Cache-Control: no-cache
+Connection: Keep-Alive
+Pragma: no-cache
+Content-Type: application/json
+Accept: application/json, text/plain, */*
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+Authorization: Bearer a8328319-5fa3-4e97-8870-00569d748596
+Host: localhost:3007
+Referer: http://localhost:3005/
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36
+Origin: http://localhost:3005
+Content-Length: 24
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+Sec-Fetch-Site: same-site
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+MS-ASPNETCORE-TOKEN: 7c23448b-39cb-481f-9856-654d7572bad3
+X-Original-Proto: http
+X-Original-For: 127.0.0.1:63604
