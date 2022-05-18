@@ -38,6 +38,7 @@ call plug#end()
 " ==============================================================
 
 " Space Leader 
+"  let mapleader="\\"
 let mapleader=" "
 
 set ignorecase " when searching make it case insensitive 
@@ -58,7 +59,7 @@ nnoremap gt eturn (<CR>Oconst extracted = ;<Esc>"0P
 nmap go <Cmd>call VSCodeCall('gitlens.openWorkingFile')<CR>
 
 " search favorites
-nmap <Leader>f <Cmd>call VSCodeCall('favorites.browse')<CR>
+"  nmap <Leader>f <Cmd>call VSCodeCall('favorites.browse')<CR>
 
 nmap <Leader>g <Cmd>call VSCodeCall('workbench.action.quickOpen')<CR>
 
@@ -68,7 +69,7 @@ nmap <Leader>p <Cmd>call VSCodeCall('favorites.browse')<CR>
 nmap g8 <Cmd>call VSCodeCall('editor.action.openLink')<CR>
 
 " Save and source init.vim
-nmap <Leader>s <Cmd>call VSCodeCall("workbench.action.files.save")<CR>:source $MYVIMRC<CR>
+nmap <Leader>1 <Cmd>call VSCodeCall("workbench.action.files.save")<CR>:source $MYVIMRC<CR>
 
 " Show popup inline documentation
 nmap gp <Cmd>call VSCodeCall("editor.action.showHover")<CR>
@@ -110,7 +111,7 @@ nnoremap gT <ESC>
 noremap <Leader>c yoconsole.log("<C-r>0");<ESC>"
 
 " Open vimrc 
-nnoremap <Leader>r :Edit $MYVIMRC<cr>
+nnoremap <Leader>n :Edit $MYVIMRC<cr>
 
 " when yarking in visual mode put in both system and vim clipboard
 vnoremap y ygv"+y
@@ -146,12 +147,12 @@ nnoremap cc ddko
 " Select line but not whitespace and new line
 nnoremap <Leader>v ^v$h
 
-
 " ===============================================================
 " Plugins
 " ===============================================================
 
 " Easymotion
+"  map <Space> <Plug>(easymotion-s2)
 map s <Plug>(easymotion-s2)
 map S <Plug>(easymotion-F2)
 let g:EasyMotion_smartcase = 1
@@ -227,6 +228,7 @@ vnoremap \e <cmd>call VSCodeReplaceInVisualSelection()<cr>
 " Open VSCode find in all files 
 command! FindInFileS call VSCodeNotify('workbench.action.findInFiles', {'query': @p})
 xnoremap <silent> \s "py<Esc>:FindInFileS<CR>
+
 command! FindInFilesNoInput call VSCodeCall('workbench.action.findInFiles')
 nnoremap <silent> \s "py<Esc>:FindInFilesNoInput<CR>
 
