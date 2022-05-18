@@ -58,13 +58,13 @@ nnoremap gt eturn (<CR>Oconst extracted = ;<Esc>"0P
 " Open Gitlens Compare in edit mode
 nmap go <Cmd>call VSCodeCall('gitlens.openWorkingFile')<CR>
 
-" search favorites
+"  "  search favorites
 "  nmap <Leader>f <Cmd>call VSCodeCall('favorites.browse')<CR>
 
 nmap <Leader>g <Cmd>call VSCodeCall('workbench.action.quickOpen')<CR>
 
 " serach all files
-nmap <Leader>p <Cmd>call VSCodeCall('favorites.browse')<CR>
+"  nmap <Leader>p <Cmd>call VSCodeCall('favorites.browse')<CR>
 
 nmap g8 <Cmd>call VSCodeCall('editor.action.openLink')<CR>
 
