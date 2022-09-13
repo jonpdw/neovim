@@ -116,6 +116,9 @@ vnoremap \e <cmd>call VSCodeReplaceInVisualSelection()<cr>
 " Make a console.log with selected text
 noremap <Leader>c yoconsole.log("<C-r>0");<ESC>"
 
+" Open vscode global snippet file
+nnoremap <Leader>s :Edit c:\Users\jonathan.dewet\AppData\Roaming\Code\User\snippets/globalTest.code-snippets<cr>
+
 " Open vimrc 
 nnoremap <Leader>n :Edit $MYVIMRC<cr>
 
