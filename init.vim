@@ -1,15 +1,21 @@
+" ==============================================================
+" Tips
+" ==============================================================
+" 
+" To use vim lion (align things) press gl
+" https://github.com/tommcdo/vim-lion
+"
+"
+
 " https://github.com/asvetliakov/vscode-neovim
 
 " Use PlugInstall to install in a real terminal to install new plugins
-" Plugins will be downloaded under the specified directory.
-"
-" Run PlugInstall if there are missing plugins
+
 autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
 
 call plug#begin('~/.vim/plugged')
-" Declare the list of plugins.
 Plug 'tpope/vim-sensible'
 Plug 'junegunn/seoul256.vim'                " Color Scheme
 Plug 'tpope/vim-surround'                   " Change surrounding characters
@@ -20,15 +26,7 @@ Plug 'wellle/targets.vim'                   " Delete arguments object
 Plug 'tommcdo/vim-lion'                     " Align comments
 Plug 'michaeljsmith/vim-indent-object'      " Indent object
 
-" " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
-
-" ==============================================================
-" Vim Lion
-" ==============================================================
-
-" https://github.com/tommcdo/vim-lion
-" gl 
 
 " ==============================================================
 " Settings
@@ -47,6 +45,9 @@ set smartcase
 " VSCode 
 " ===============================================================
 
+" run quokka once
+nmap <Leader>r <Cmd>call VSCodeCall("quokka.runOnce")<CR>
+
 " extract function inside react tsx prop
 nmap <Leader>x ?={<CR>llvi{yva{c{extracted}<Esc>?e the old tab
 nnoremap gt eturn (<CR>Oconst extracted = ;<Esc>"0P
@@ -62,6 +63,8 @@ nmap <Leader>1 <Cmd>call VSCodeCall("workbench.action.files.save")<CR>:source $M
 
 " Show popup inline documentation
 nmap gp <Cmd>call VSCodeCall("editor.action.showHover")<CR>
+
+nmap <Leader>g <Cmd>call VSCodeCall("editor.action.triggerParameterHints")<CR>
 
 " Move between splits
 nmap <Leader>h <Cmd>call VSCodeNotify('multiCommand.moveLeft')<CR>
@@ -109,6 +112,10 @@ nnoremap <silent> \s "py<Esc>:FindInFilesNoInput<CR>
 " Vscode Replace with Visual Selection
 vnoremap \e <cmd>call VSCodeReplaceInVisualSelection()<cr>
 
+" Copy current path and line number to the clipboard
+nnoremap <Leader>a <Cmd>call VSCodeCall('copy-relative-path-and-line-numbers.both')<CR>
+ 
+
 " ===============================================================
 " Pure Vim
 " ===============================================================
@@ -118,6 +125,9 @@ noremap <Leader>c yoconsole.log("<C-r>0");<ESC>"
 
 " Open vscode global snippet file
 nnoremap <Leader>s :Edit c:\Users\jonathan.dewet\AppData\Roaming\Code\User\snippets/globalTest.code-snippets<cr>
+
+" Open scratch/main.txt
+nnoremap <Leader>3 <Cmd>call VSCodeCall('copy-relative-path-and-line-numbers.both')<CR>:Edit C:\Personal_Git\scratch\main.txt<cr>
 
 " Open vimrc 
 nnoremap <Leader>n :Edit $MYVIMRC<cr>
@@ -152,9 +162,34 @@ nnoremap <Leader>v ^v$h
 
 " Improved back and forward by word
 nnoremap <silent> w :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'f')<CR>
+    
 vnoremap <silent> w :<C-U>let g:_saved_search_reg=@/<CR>gv/\(^\\|\<\)[A-Za-z0-9_]<CR>:<C-U>let @/=g:_saved_search_reg<CR>gv
+
 nnoremap <silent> b :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'b')<CR>
 vnoremap <silent> b :<C-U>let g:_saved_search_reg=@/<CR>gv?\(^\\|\<\)[A-Za-z0-9_]<CR>:<C-U>let @/=g:_saved_search_reg<CR>gv
+
+
+" toggle "//?" from the end of the current line
+" e.g. "console.log('hello world'); //?" -> "console.log('hello world');"
+" e.g. "console.log('hello world');" -> "console.log('hello world'); //?"
+nnoremap <silent> <leader>d :<C-U>call ToggleCommentWithQuestionMark()<CR>
+
+function ToggleCommentWithQuestionMark()
+    let l:line = getline('.') " get current line
+    let l:comment = '//?' " comment to toggle
+    let l:commented = l:line =~ '//?' ? 1 : 0 " check if line is commented
+    if l:commented
+        let l:line = substitute(l:line, '//?', '', '') " remove comment
+    else
+        " trim whitespace from the end of the line
+        let l:line = substitute(l:line, '\s\+$', '', '')
+        let l:line = l:line . ' //?' " add comment
+    endif
+    call setline('.', l:line) " set line
+endfunction
+
+
+
 
 " ===============================================================
 " Plugins
@@ -176,8 +211,8 @@ let g:EasyMotion_use_smartsign_us = 1
 augroup filetype_csharp
     autocmd!
     " Go to the actual implementation of a method in c# files
-    autocmd FileType cs nmap <buffer> gd <Cmd>call VSCodeCall("editor.action.goToImplementation")<CR>
-    autocmd FileType cs nmap <buffer> gD <Cmd>call VSCodeCall("editor.action.revealDefinition")<CR>
+    autocmd FileType cs nmap <buffer> gD <Cmd>call VSCodeCall("editor.action.goToImplementation")<CR>
+    autocmd FileType cs nmap <buffer> gd <Cmd>call VSCodeCall("editor.action.revealDefinition")<CR>
 augroup END
 
 
@@ -224,6 +259,21 @@ endfunction
 " Disable annoying settings when using windows neovim client neovide
 let g:neovide_cursor_trail_length=0
 let g:neovide_cursor_animation_length=0
+
+imap <C-V> <C-R><C-P>+
+"  " only when in qtvim (windows neovim client)
+"  if exists('g:GuiLoaded')
+    "  noremap <C-v> "+gP
+    "  vnoremap <C-v> "+gP
+    "  noremap <C-c> "+y
+    "  vnoremap <C-c> "+y
+"  endif
+
+"  " Configure closing the window to copy text to the clipboard and not throw any errors
+"  augroup CloseWindowCopy
+"    autocmd!
+"    autocmd BufWinLeave * silent! execute 'normal! ggVGy' | silent! w | silent! q
+"  augroup END
 
 " QuickScope settings
 highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline " Make sure colors work on VScode
