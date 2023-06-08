@@ -113,9 +113,27 @@ nnoremap <silent> \s "py<Esc>:FindInFilesNoInput<CR>
 vnoremap \e <cmd>call VSCodeReplaceInVisualSelection()<cr>
 
 " Copy current path and line number to the clipboard
-nnoremap <Leader>a <Cmd>call VSCodeCall('copy-relative-path-and-line-numbers.both')<CR>
+nnoremap <Leader>a <Cmd>call VSCodeCall('extension.copyRelativePathWithLineNumber')<CR>
  
 
+"  function! OpenActiveFile()
+"      " Get the current file and line number
+"      let current_file = expand('%:p')
+"      let current_line = line('.')
+
+"      " Close the VSCode diff view
+"      call VSCodeCall('workbench.action.closeActiveEditor')
+
+"      " Open the active file from step 1 by itself
+"      let file_uri = 'file://' . current_file
+"      call VSCodeExtensionNotify('open-file', file_uri)
+
+"      " Move to the line number
+"      execute 'normal! ' . current_line . 'G'
+"  endfunction
+
+" Map the function to a keybinding
+"  nnoremap go :call OpenActiveFile()<CR>
 " ===============================================================
 " Pure Vim
 " ===============================================================
@@ -127,7 +145,8 @@ noremap <Leader>c yoconsole.log("<C-r>0");<ESC>"
 nnoremap <Leader>s :Edit c:\Users\jonathan.dewet\AppData\Roaming\Code\User\snippets/globalTest.code-snippets<cr>
 
 " Open scratch/main.txt
-nnoremap <Leader>3 <Cmd>call VSCodeCall('copy-relative-path-and-line-numbers.both')<CR>:Edit C:\Personal_Git\scratch\main.txt<cr>
+"  nnoremap <Leader>3 <Cmd>call VSCodeCall('copy-relative-path-and-line-numbers.both')<CR>:Edit C:\Personal_Git\scratch\main.txt<cr>
+nnoremap <Leader>3 :Edit C:\Personal_Git\scratch\main.txt<cr>
 
 " Open vimrc 
 nnoremap <Leader>n :Edit $MYVIMRC<cr>
@@ -261,6 +280,7 @@ let g:neovide_cursor_trail_length=0
 let g:neovide_cursor_animation_length=0
 
 imap <C-V> <C-R><C-P>+
+nnoremap <C-s> :w<CR>
 "  " only when in qtvim (windows neovim client)
 "  if exists('g:GuiLoaded')
     "  noremap <C-v> "+gP
